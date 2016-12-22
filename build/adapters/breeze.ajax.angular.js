@@ -11,13 +11,13 @@
     // AMD anonymous module with hard-coded dependency on "breeze-client"
     define(["breeze-client"], factory);
   }
-}(function (breeze) {
+} (function (breeze) {
   "use strict";
   var core = breeze.core;
 
   var ctor = function AjaxAngularAdapter() {
     this.name = "angular";
-    this.defaultSettings = { };
+    this.defaultSettings = {};
     this.requestInterceptor = null;
     // Will set:
     //   this.$http;
@@ -76,7 +76,7 @@
       var compositeConfig = core.extend({}, this.defaultSettings);
       ngConfig = core.extend(compositeConfig, ngConfig);
       // extend is shallow; extend headers separately
-      var headers =core.extend({}, this.defaultSettings.headers); // copy default headers 1st
+      var headers = core.extend({}, this.defaultSettings.headers); // copy default headers 1st
       ngConfig.headers = core.extend(headers, ngConfig.headers);
     }
 
@@ -97,8 +97,8 @@
 
     if (requestInfo.config) { // exists unless requestInterceptor killed it.
       this.$http(requestInfo.config)
-          .success(requestInfo.success)
-          .error(requestInfo.error);
+        .success(requestInfo.success)
+        .error(requestInfo.error);
       this.$rootScope && this.$rootScope.$digest();
     }
 
