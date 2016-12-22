@@ -97,38 +97,38 @@
 
     if (requestInfo.config) { // exists unless requestInterceptor killed it.
       this.$http(requestInfo.config)
-        .success(requestInfo.success)
-        .error(requestInfo.error);
+        .then(requestInfo.success)
+        .catch(requestInfo.error);
       this.$rootScope && this.$rootScope.$digest();
     }
 
-    function successFn(data, status, headers, xconfig, statusText) {
+    function successFn(response, data, status, headers, xconfig, statusText) {
       // HACK: because $http returns a server side null as a string containing "null" - this is WRONG.
-      if (data === "null") data = null;
+      if (response.data === "null") response.data = null;
       var httpResponse = {
         config: config,
-        data: data,
-        getHeaders: headers,
-        ngConfig: xconfig,
-        status: status,
-        statusText: statusText
+        data: response.data,
+        getHeaders: response.headers,
+        ngConfig: response.config,
+        status: response.status,
+        statusText: response.statusText
       };
       config.success(httpResponse);
     }
 
-    function errorFn(data, status, headers, xconfig, statusText) {
+    function errorFn(response, data, status, headers, xconfig, statusText) {
       // Timeout appears as an error with status===0 and no data.
       // Make it better
-      if (status === 0 && data == null) {
-        data = 'timeout';
+      if (response.status === 0 && response.data == null) {
+        response.data = 'timeout';
       }
       var httpResponse = {
         config: config,
-        data: data,
-        getHeaders: headers,
-        ngConfig: xconfig,
-        status: status,
-        statusText: statusText
+        data: response.data,
+        getHeaders: response.headers,
+        ngConfig: response.config,
+        status: response.status,
+        statusText: response.statusText
       };
       config.error(httpResponse);
     }
